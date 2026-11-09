@@ -1,7 +1,7 @@
 # Restauruuun
 ### 菜单会改变，你的选择也是。 / The menu changes. So do your choices.
 
-[**进入互动餐厅 · Experience the restaurant →**](https://jingxuanhu0510.github.io/restauruuun/)
+[**进入互动餐厅 · Experience the restaurant →**](https://restauruuun-app.onrender.com/)
 
 Restauruuun 是一件以高级餐厅点单界面为入口的互动网页作品。浏览、点单、查看分析，再开始下一轮：每一次选择都会参与塑造接下来出现的菜单。它邀请你思考：当系统越来越懂你的偏好，你还能注意到哪些选项正在消失吗？
 
@@ -9,9 +9,7 @@ Restauruuun is an interactive web artwork presented as a fine-dining ordering ex
 
 ![Restauruuun 入口展示 / Welcome screen](docs/images/01-welcome.png)
 
-> **关于展示图 / About the images**  
-> 以下四张图片由项目作者提供，用于展示项目视觉与体验方向。它们与本仓库当前上线原型存在差异：Chef’s Special 分类、数量加减、纸质小票式报告、风味分析及 PNG 下载等截图细节，尚未在当前 HTML 中实现。实际功能以在线演示为准。  
-> These four images were supplied by the project author to illustrate its visual and experiential direction. They differ from the currently deployed prototype: the Chef’s Special category, quantity controls, receipt-style report, flavor analysis, and PNG download shown in the images are not implemented in the current HTML. The live demo reflects the available functionality.
+> 本仓库现已更新为 Next.js 完整项目，展示图由作者提供。 / This repository now contains the full Next.js application; images are supplied by the author.
 
 ## 01 · 浏览与选择 / Browse & choose
 
@@ -21,28 +19,17 @@ The prototype starts with **126 dishes** across six categories: amuse-bouche, ap
 
 ![菜品卡片与分类导航 / Menu cards and category navigation](docs/images/02-menu.png)
 
-## 02 · 组成你的托盘 / Build your tray
+## 02 · 托盘 / Your tray
 
-打开右上角的购物袋查看选择，并移除不想要的条目。同一道菜可以重复加入。当前版本会统计托盘中的真实菜品与算法菜品，选择完成后点击 **Start Analysis（开始分析）**。
+查看选择、调整数量并结算。 / Review selections, adjust quantities, and check out.
 
-Open the shopping bag in the upper-right corner to review your selections and remove individual entries. A dish can be added more than once. The current prototype counts real and algorithmic items in the tray; select **Start Analysis** when ready.
+![托盘 / Tray](docs/images/03-tray.png)
 
-![托盘体验展示 / Tray experience](docs/images/03-tray.png)
+## 03 · 味觉报告 / Taste report
 
-## 03 · 看见选择的结果 / See what your choices produce
+结算后查看小票式报告，返回菜单观察下一轮变化。 / Review the receipt-style report, then return to the menu to observe the next evolution.
 
-当前分析页使用环形图展示真实菜品与算法菜品的比例，并计算“现实完整度”。这是作品内部的互动指标，不是营养、健康或心理评估。
-
-The current analysis screen visualizes the proportion of real and algorithmic dishes in a doughnut chart and calculates a “Reality Score.” This is an artistic interaction metric, not a nutritional, health, or psychological assessment.
-
-**现实完整度 = 100 − 算法菜品占比（四舍五入为整数百分比）**  
-**Reality Score = 100 − the rounded percentage of algorithmic items**
-
-报告展示后，系统在约 10 秒后自动开始下一轮，也可以点击 **Next Session**。下一轮会根据刚才点过的分类，用算法菜品替换其中最多三道未在本轮点选、且累计点单较少的菜品。
-
-After the report, a new session begins automatically after about 10 seconds, or immediately via **Next Session**. In each ordered category, the next session replaces up to three less-ordered dishes that were not selected in the last tray with algorithmic dishes.
-
-![小票式报告视觉展示 / Receipt-style report concept](docs/images/04-report.png)
+![报告 / Report](docs/images/04-report.png)
 
 ## 04 · 为什么菜单会“跑掉”？ / Why does the menu “run away”?
 
@@ -53,27 +40,16 @@ The work turns a recommendation feedback loop into a restaurant experience: choi
 可以尝试连续几轮只点同一分类，再观察菜单的变化。  
 Try choosing from the same category for several rounds and observe how the menu changes.
 
-## 本地运行 / Run locally
+## 运行与部署 / Run & deploy
 
-下载仓库后，用浏览器打开 `index.html` 即可，无需安装依赖或执行构建。需要联网加载运行库、字体及菜品图片。
+使用 Node.js，执行 `npm ci`、`npm run build`、`npm start`。开发模式使用 `npm run dev`。
+Use Node.js and run `npm ci`, `npm run build`, and `npm start`. Use `npm run dev` for development.
 
-Download the repository and open `index.html` in a browser. No installation or build step is required. An internet connection is needed for libraries, fonts, and dish images.
+原始菜品使用 `public/menu-images` 中的本地图片；新菜品通过服务端 Google Gemini 图片接口生成。将 `GEMINI_API_KEY` 配置为服务端环境变量，切勿提交密钥。
+Original dishes use local photos in `public/menu-images`. New dishes use server-side Google Gemini image generation. Set `GEMINI_API_KEY` as a server environment variable; never commit credentials.
 
-- **页面 / Interface:** React 18、Tailwind CSS、浏览器端 Babel / Babel in the browser.
-- **图表 / Charts:** Chart.js.
-- **字体 / Fonts:** Google Fonts.
-- **菜品图片 / Dish images:** Pollinations 外部图片服务 / external image service.
-- **部署 / Hosting:** GitHub Pages，`main` 分支根目录 / root of the `main` branch.
+菜单演化和图片缓存保存于服务端 `.dish-images`。Render 免费实例的文件不会持久保存，重启或重新部署后演化状态与生成图片可能重置；空闲后首次访问也可能需要等待唤醒。
+Evolution state and generated images are stored in server-side `.dish-images`. Files on Render's free instance are ephemeral and may reset on restart or redeploy. The first request after inactivity may need to wait for the service to wake up.
 
-菜单演化与点单状态保存在当前页面内存中，刷新页面会重置。外部服务的可用性与网络状况会影响图片、字体及页面加载。
-
-Menu evolution and ordering state live in page memory and reset on refresh. External service availability and network conditions affect image, font, and page loading.
-
-## 文件结构 / Files
-
-```text
-restauruuun/
-├── index.html          # 互动网页 / Interactive website
-├── README.md           # 项目介绍 / Project guide
-└── docs/images/        # 作者提供的展示图 / Author-supplied images
-```
+此目录是单独的部署副本，原始本地项目未作修改。
+This is a separate deployment copy. The original local project is unchanged.
