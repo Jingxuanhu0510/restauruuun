@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { Suspense, useEffect, useState, useRef } from "react";
 import html2canvas from "html2canvas";
 
-export default function ReceiptPage() {
+function ReceiptContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const receiptRef = useRef(null);
@@ -203,3 +203,5 @@ export default function ReceiptPage() {
     </div>
   );
 }
+
+export default function ReceiptPage() { return <Suspense fallback={<p>Loading receipt...</p>}><ReceiptContent /></Suspense>; }
